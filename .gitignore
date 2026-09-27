@@ -1,0 +1,13 @@
+# Файлы ОС и редакторов
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+.idea/
+.vscode/
+
+# Временные файлы kubectl
+*.kubeconfig.bak
+
+# Заметки
+LONGRID.md

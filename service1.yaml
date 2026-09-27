@@ -1,0 +1,23 @@
+# Service для доступа к репликам приложения из задания 1.
+# ClusterIP достаточно: обращаться будем из другого пода внутри кластера.
+# Имя nginx-multitool-svc резолвится через CoreDNS, трафик распределяется
+# по готовым репликам Deployment'а.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-multitool-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-multitool
+  ports:
+    # приложение nginx
+    - name: http
+      port: 80
+      targetPort: 80
+    # мультитул: в ответе печатает имя и IP пода,
+    # по нескольким запросам видно попадание в разные реплики
+    - name: multitool-http
+      port: 8080
+      targetPort: 8080

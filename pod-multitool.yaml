@@ -1,0 +1,15 @@
+# Отдельный под с мультитулом: из него через curl проверяется доступ
+# к приложению из задания 1.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool-pod
+  labels:
+    app: multitool
+spec:
+  containers:
+    - name: multitool
+      image: wbitt/network-multitool
+      ports:
+        - containerPort: 80

@@ -1,0 +1,43 @@
+# Deployment nginx: основной контейнер стартует только после появления Service.
+#
+# Init-контейнер на busybox в цикле проверяет, что DNS-имя сервиса резолвится
+# через CoreDNS. Пока service2.yaml не применён, имя не резолвится, под висит
+# в Init:0/1, а контейнер nginx не запускается.
+#
+# Имя указано полностью — nginx-svc.default.svc.cluster.local. 
+# busybox-nslookup перебирает search-домены из /etc/resolv.conf и возвращает код 1 даже при найденной записи.
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx-init
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-init
+  template:
+    metadata:
+      labels:
+        app: nginx-init
+    spec:
+      initContainers:
+        - name: wait-for-service
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nslookup nginx-svc.default.svc.cluster.local; do
+                echo "service nginx-svc is not created yet, waiting..."
+                sleep 2
+              done
+              echo "service nginx-svc found, starting nginx"
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80

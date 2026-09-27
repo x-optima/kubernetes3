@@ -1,0 +1,16 @@
+# Service приложения из задания 2. Применяется вторым, после deployment2.yaml:
+# сначала нужно показать, что без сервиса nginx не стартует.
+# Имя nginx-svc совпадает с тем, которое резолвит init-контейнер.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-init
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
