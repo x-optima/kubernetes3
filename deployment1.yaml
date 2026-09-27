@@ -1,7 +1,9 @@
+# deployment1.yaml
+
 # Deployment приложения из двух контейнеров: nginx и multitool.
 #
 # Контейнеры пода делят общий сетевой namespace, поэтому два nginx на порту 80
-# ужиться не могут: внутри образа wbitt/network-multitool тоже работает nginx.
+# работать не могут: внутри образа wbitt/network-multitool тоже работает nginx.
 # Порт внутреннего nginx мультитула сдвинут на 8080 переменной HTTP_PORT.
 
 apiVersion: apps/v1
